@@ -1,0 +1,17 @@
+version: "3"
+services:
+  sut2:
+    container_name: sut2
+    build: ../../sut
+    ports:
+      - "8082:8082"
+    # this sets the environment variable that is then set in the container and can be accessed by programs
+    environment:
+      - "PORT=8082"
+  robot2:
+    container_name: robot2
+    build: .
+    links:
+      - sut2
+    volumes:
+      - ./output:/SUT/output

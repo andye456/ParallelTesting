@@ -1,0 +1,12 @@
+version: "3"
+services:
+  sut:
+    container_name: sut
+    build: sut
+    ports:
+      - "8080:8080"
+  robot:
+    container_name: robot
+    build: robot
+    links:
+      - sut
