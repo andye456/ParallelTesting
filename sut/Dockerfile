@@ -1,7 +1,6 @@
 FROM python:2.7
 
 COPY Server.py /SUT/Server.py
-COPY MyName.py /SUT/MyName.py
 COPY index.html /SUT/index.html
 
 ARG PORT

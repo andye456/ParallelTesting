@@ -5,8 +5,13 @@ services:
     build: sut
     ports:
       - "8080:8080"
+    environment:
+      - "PORT=8080"
+
   robot:
     container_name: robot
     build: robot
     links:
       - sut
+    volumes:
+      - ./output:/SUT/output

@@ -7,6 +7,13 @@ hostName = '0.0.0.0'
 hostPort = int(os.getenv('PORT'))
 print(str(hostName)+":"+str(hostPort))
 
+# This is a python web server - it must have the environment variable PORT set on the machine it is running on.
+# e.g. PORT=8080
+#
+# If the web server receives a POST request of data=nnn it wil return nnn
+# If it receives a POST of {"data": nnnnn} then it'll return {"returned": nnnnn}
+# If it receives any other name, e.g. value=nnnnn, then it'll return -1
+# (Where nnnn represents an integer number)
 class Server(BaseHTTPRequestHandler):
 
     def __init__(self,request,client_addres,server):
