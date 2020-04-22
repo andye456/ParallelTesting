@@ -1,0 +1,18 @@
+version: "3"
+services:
+  sut{num}:
+    container_name: sut{num}
+    build: ../../sut
+    ports:
+      - "{port}:{port}"
+    # this sets the environment variable that is then set in the container and can be accessed by programs
+    environment:
+      - "PORT={port}"
+  robot{num}:
+    container_name: robot{num}
+    build: .
+    links:
+      - sut{num}
+    volumes:
+      - ./output:/SUT/output
+

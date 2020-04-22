@@ -2,3 +2,4 @@ output
 venv
 .idea
 *.log
+auto_gen/test-cases/

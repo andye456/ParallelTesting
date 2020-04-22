@@ -2,6 +2,7 @@ import sys, os
 from BaseHTTPServer import BaseHTTPRequestHandler
 import SocketServer
 import json
+import time
 
 hostName = '0.0.0.0'
 hostPort = int(os.getenv('PORT'))
@@ -51,6 +52,8 @@ class Server(BaseHTTPRequestHandler):
                 json_ret_val = {"returned": loaded[x]}
             ret_val = json.dumps(json_ret_val)
         print("Returning: "+ret_val)
+        # put a pause in to make the test take a measurable length of time.
+        time.sleep(5)
         self.wfile.write(ret_val.encode('UTF-8'))
 
 
