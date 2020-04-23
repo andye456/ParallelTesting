@@ -9,7 +9,7 @@ if not os.path.exists("test-cases"):
     os.mkdir("test-cases")
 os.chdir("test-cases")
 
-for test in range(0, 10):
+for test in range(0, 100):
     # establish a port for this test
     port = 8080+test
 

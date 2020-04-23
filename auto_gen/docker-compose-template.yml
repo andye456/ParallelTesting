@@ -2,7 +2,7 @@ version: "3"
 services:
   sut{num}:
     container_name: sut{num}
-    build: ../../sut
+    build: ../../../sut
     ports:
       - "{port}:{port}"
     # this sets the environment variable that is then set in the container and can be accessed by programs

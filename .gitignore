@@ -3,3 +3,4 @@ venv
 .idea
 *.log
 auto_gen/test-cases/
+__pycache__
