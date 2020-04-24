@@ -4,3 +4,4 @@ venv
 *.log
 auto_gen/test-cases/
 __pycache__
+performance/test-cases/

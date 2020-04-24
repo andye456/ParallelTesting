@@ -35,12 +35,25 @@ The initial aim is 100 Robot tests against 100 web servers.
 The results will be written back to a shared location and merged using rebot.
 
 ## HOW TO
+### Automation
+#### Create many parallel containers, each running one test. 
+
+To auto generate the tests for stress tests then call {home}/CreateTestCases.py. This will create auto_gen/test-cases/TC{0-100}
+
 To run the tests call ./test-runner.sh from {home} location, this calls set-up.sh and tear-down.sh, these can be commented out if
 you don't want to re-create the images or create the results.
 
-To auto generate the tests for soak tests then call {home}/CreateTestCases.py. This will create auto_gen/test-cases/TC{0-100}
-
 To run the tests call test-runner.sh from auto_gen. By default this will clear out the old docker containers adn images and recreate them.
+
+### Performance
+#### Create parallel tests each containing a varied number of tests
+There may be a point where it is better to have less containers running more tests as the overhead of creating the images becomes significant 
+and the docker network for the particular host gets too slow.
+
+* Delete the old test directories under performance/test-cases/TC* (you need to do this as root as the shared output directory is written to as root)
+* In the root directory edit the script CreatePerformanceTests.py and adjust the number of tests and the number of containers - this is the number of tests per container
+* In the directory {root}/performance edit test-runner.sh and make sure the number of test = number of containers.
+* Check the containers and images currently in existance. docker ps -a, docker images. Remove if necessary docker image rm {name}, docker rm $(docker ps -a -q)
 
 ## Troubleshooting
 ##### If you can only run 31 tests at a time it's because the docker network range is restricting this. To solve add the following:
