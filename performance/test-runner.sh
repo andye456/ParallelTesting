@@ -32,6 +32,14 @@ do
   wait $pid
 done
 
+# Wait until all the containers have stopped then tear-down
 sleep 6
-
-./tear-down.sh $tests
+while [[ 1==1 ]]; do
+  if [[ `docker ps | grep robot` == "" ]]
+  then
+    ./tear-down.sh $tests
+    exit 0
+  fi
+  sleep 10
+  echo "waiting!"
+done

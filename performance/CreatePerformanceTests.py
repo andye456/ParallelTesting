@@ -3,6 +3,7 @@ import os
 
 # Creates the following test scenarios
 import re
+import sys
 
 """
 Number of tests Parallel Tests
@@ -38,16 +39,18 @@ TC{num}
 
 
     def __init__(self):
-        self.WORKDIR = "performance"
-        if not os.path.exists(self.WORKDIR):
-            os.mkdir(self.WORKDIR)
-        os.chdir(self.WORKDIR)
+        # self.WORKDIR = "performance"
+        # if not os.path.exists(self.WORKDIR):
+        #     os.mkdir(self.WORKDIR)
+        # os.chdir(self.WORKDIR)
         # Create the test case directory and change to it
         if not os.path.exists("test-cases"):
             os.mkdir("test-cases")
         os.chdir("test-cases")
+        print("init dir"+os.getcwd())
 
     def create_tests(self, number, concurrent):
+        print("create tests start dir = " + os.getcwd())
         test_num=0
         for p in range(0, concurrent):
             port = 8080 + p
@@ -56,7 +59,7 @@ TC{num}
             if not os.path.exists(current_test):
                 os.mkdir(current_test)
             os.chdir(current_test)
-
+            print("creating test in " + os.getcwd())
             with open(current_test + ".robot", "w") as f:
                 print("created file TC" + str(p) + ".robot")
                 # Write settings
@@ -65,9 +68,7 @@ TC{num}
                 # write Test Case
                 for t in range(0, number):
                     for line in self.TCn.splitlines():
-                        print(line)
-                        new_line=line.replace("{num}", str(test_num)).replace("{port}", str(port).replace("{TC}", str(p)))+"\n"
-                        print(new_line)
+                        new_line=line.replace("{num}", str(test_num)).replace("{port}", str(port)).replace("{TC}", str(p))+"\n"
                         f.write(new_line)
                     test_num+=1
                 self.createDockerfile(p)
@@ -79,6 +80,7 @@ TC{num}
 
     # generates the docker file from the template
     def createDockerfile(self,num):
+        print("createDockerfile "+os.getcwd())
         dft = open("../../../auto_gen/DockerfileTemplate", "rt")
         # create a new Dockerfile for this test
         df = open("Dockerfile", "wt")
@@ -89,6 +91,7 @@ TC{num}
 
     # generates the dcoker-compose.yml file from the template
     def createCompose(self, num, port):
+        print("createCompose: "+os.getcwd())
         dct = open("../../../auto_gen/docker-compose-template.yml", "rt")
         # Create a new docker-compose.yml for this test
         dc = open("docker-compose.yml", "wt")
@@ -99,6 +102,7 @@ TC{num}
 
     # changes the number of test run in the bash script to match the number of test cases TC*
     def edit_bash(self, num):
+        print("edit_bash = "+os.getcwd())
         with open("../test-runner.sh", "r") as f:
             lines = f.readlines()
         with open("../test-runner.sh", "w") as f:
@@ -109,51 +113,10 @@ TC{num}
 
 
 perftests = CreatePerformanceTests();
-# This creates n tests per m test suites (n*m total tests)
-perftests.create_tests(5, 10)
+# This creates n tests in m test suites (n*m total tests)
+tests_per_suite=sys.argv[1]
+test_suites=sys.argv[2]
+print("Creating %s test_suites with %s tests each..." % (test_suites, tests_per_suite))
+perftests.create_tests(int(tests_per_suite), int(test_suites))
+# perftests.create_tests(5, 10)
 
-# for test in range(0, 50):
-#     # establish a port for this test
-#     port = 8080 + test
-#
-#     if not os.path.exists("TC" + str(test)):
-#         os.mkdir("TC" + str(test))
-#     os.chdir("TC" + str(test))
-#
-#     # open the template for the docker file and docker-compose.yml file
-#     dft = open("../../DockerfileTemplate", "rt")
-#     dct = open("../../docker-compose-template.yml", "rt")
-#     # create a new Dockerfile for this test
-#     df = open("Dockerfile", "wt")
-#     for line in dft:
-#         df.write(line.replace("{num}", str(test)).replace("{port}", str(port)))
-#
-#     dft.close()
-#     df.close()
-#     # Create a new docker-compose.yml for this test
-#     dc = open("docker-compose.yml", "wt")
-#     for line in dct:
-#         dc.write(line.replace("{num}", str(test)).replace("{port}", str(port)))
-#     dct.close()
-#     dc.close()
-#
-#     with open("TC" + str(test) + ".robot", "w") as f:
-#         f.write("""
-# *** Settings ***
-# Library  HttpLibrary.HTTP
-#
-# *** Test Cases ***
-# TC%s
-#     # The webserver conext is sut:8080 as the services name is sut and this is what
-#     # is used for the DNS name.
-#     [Documentation]    Test Case %s using query string POST values
-#     Create HTTP Context  sut%s:%s
-#     set request body  data=10011
-#     POST  /index.html
-#     ${resp}=  get response status
-#     response status code should equal  200
-#     ${body}=  get response body
-#     response body should contain  data=10011
-#     """ % (test, test, test, port))
-#
-#     os.chdir("..")
