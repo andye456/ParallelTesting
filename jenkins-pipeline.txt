@@ -1,0 +1,23 @@
+pipeline {
+    agent {label "master"}
+    stages {
+        stage('1') {
+            steps {
+                script {
+                    def mytests = [:]
+                    def count = 10;
+                    for (i in 0..<count) {
+                        mytests[i] = {
+                            node {
+                                stage(i) {
+                                    sh 'echo i'
+                                }
+                            }
+                        }
+                    }
+                    parallel mytests
+                }
+            }
+        }
+    }
+}
