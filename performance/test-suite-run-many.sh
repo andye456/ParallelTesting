@@ -13,33 +13,9 @@
 
 . ./test-suite-utils.sh
 
-# test the test
-create 1 1
-
-# 10 tests 1 test suite
-#create 10 1
-
-# 10 tests 2 test suites
-#create 10 2
-#
-## 10 tests 5 test suites
-#create 10 5
-#
-## 10 tests 10 test suites
-#create 10 10
-#
-## 20 tests 1 test suites
-#create 20 1
-#
-## 20 tests 2 test suites
-#create 20 2
-#
-## 20 tests 5 test suites
-#create 20 5
-#
-## 20 tests 10 test suites
-#create 20 10
-#
-## 20 tests 20 test suites
-#create 20 20
-#
+# run 50 tests one per container
+for i in {19..50}
+do
+  echo "******** Running test $i ********"
+  create $i $i
+done
