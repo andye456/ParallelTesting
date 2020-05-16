@@ -1,7 +1,10 @@
 output
 venv
 .idea
+*.pyc
 *.log
 auto_gen/test-cases/
 __pycache__
 performance/test-cases/
+performance/results_*
+performance_results

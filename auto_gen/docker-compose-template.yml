@@ -8,6 +8,9 @@ services:
     # this sets the environment variable that is then set in the container and can be accessed by programs
     environment:
       - "PORT={port}"
+    # This mounts the container directory /SUT/output to the local directory, i.e. ~/performance/TC1/output
+    volumes:
+      - ./output:/SUT/output
   robot{num}:
     container_name: robot{num}
     build: .

@@ -3,6 +3,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import SocketServer
 import json
 import time
+from do_load import do_load
 
 hostName = '0.0.0.0'
 hostPort = int(os.getenv('PORT'))
@@ -36,6 +37,8 @@ class Server(BaseHTTPRequestHandler):
         content_length = int(self.headers['Content-length'])
         post_data = self.rfile.read(content_length)
         self._set_response()
+        # default sleep time
+        sleep = 5
         try:
             name = post_data.decode('utf-8').split("=")[0]
             val = post_data.decode('utf-8').split("=")[1]
@@ -47,13 +50,18 @@ class Server(BaseHTTPRequestHandler):
         except IndexError:
             # must be JSON
             loaded = json.loads(post_data.decode('utf-8'))
-            for x in loaded:
-                print("%s: %d" % (x, loaded[x]))
-                json_ret_val = {"returned": loaded[x]}
-            ret_val = json.dumps(json_ret_val)
+            if 'runtime' and 'cores' in loaded.keys():
+                print("***** Calling do_load.py *****")
+                do_load(loaded['runtime'], loaded['cores'])
+                json_ret_val = {"returned": loaded['runtime']}
+            else:
+               for x in loaded:
+                    print("%s: %d" % (x, loaded[x]))
+                    json_ret_val = {"returned": loaded[x]}
+        ret_val = json.dumps(json_ret_val)
         print("Returning: "+ret_val)
         # put a pause in to make the test take a measurable length of time.
-        time.sleep(5)
+        time.sleep(sleep)
         self.wfile.write(ret_val.encode('UTF-8'))
 
 

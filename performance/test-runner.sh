@@ -8,7 +8,7 @@
 # 5) rebot collates the results in one place.
 
 #Define the number of test cases
-tests=50
+tests=14
 
 ./set-up.sh $tests
 
