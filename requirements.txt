@@ -45,7 +45,7 @@ soupsieve==1.9.5
 subprocess32==3.5.4
 texttable==1.6.2
 urllib3==1.25.8
-waitress==1.4.3
+waitress==2.1.1
 WebOb==1.8.6
 websocket-client==0.57.0
 WebTest==2.0.34
